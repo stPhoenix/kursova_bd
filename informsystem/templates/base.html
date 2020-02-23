@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="ua">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <title>{% block title %}{% endblock %} - ІС Мебельний магазин</title>
+    </head>
+    <body class="container-fluid d-flex flex-row p-0">
+            <nav class="col-12 col-md-1 p-0 vh-100">
+                <h5 class="logo-text-color text-center p-3">ІС "Мебельний магазин"</h5>
+                <hr>
+                <ul class="h6">
+                    <li><a href="#">НАБІР</a></li>
+                    <li><a href="#">НАБОРИ</a></li>
+                    <li class="active"><a href="#" class="">О МЕБЕЛІ</a></li>
+                    <li><a href="#">ВИД</a></li>
+                    <li><a href="#">ВИРОБНИК</a></li>
+                    <li><a href="#">ПРОДАЖІ</a></li>
+                </ul>
+                <hr>
+            </nav>
+        <section class="content">
+            {% block content %}{% endblock %}
+        </section>
+    </body>
+</html>
