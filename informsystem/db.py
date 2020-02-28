@@ -39,3 +39,14 @@ def init_db_command():
     """Clear the existing data and create new tables."""
     init_db()
     click.echo('Initialized the database.')
+
+def query_db(query, args=(), one=False):
+    cur = get_db().execute(query, args)
+    if 'INSERT' in query or 'DELETE' in query or 'CREATE' in query or 'UPDATE' in query or 'DROP' in query:
+       get_db().commit()
+    if 'insert' in query or 'delete' in query or 'create' in query or 'update' in query or 'drop' in query:
+       get_db().commit()
+
+    rv = cur.fetchall()    
+    cur.close()
+    return (rv[0] if rv else None) if one else rv

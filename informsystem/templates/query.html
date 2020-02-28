@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Query
+{% endblock %}
+
+{% block content %}
+  <section class="ml-3">
+    {% if  result.success == True %}
+        <div class="alert alert-success col-11 col-md-7 com-lg-5" role="alert">
+            {{ result.message }}
+        </div>
+    {% endif %}
+    {% if  result.error == True %}
+        <div class="alert alert-danger col-11 col-md-7 com-lg-5" role="alert">
+            {{ result.message }}
+        </div>
+    {% endif %}
+    <form class="form col-12 col-md-10 col-lg-8" method="POST" action="/query">
+        <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">Запит</span>
+            </div>
+            <textarea class="form-control" aria-label="With textarea" name="query"></textarea>
+          </div>
+      <button class="btn btn-secondary mt-3" type="submit">Надіслати</button>
+    </form>
+    {% if result.data %}
+    <section class="table-responsive col-12 col-md-10 col-lg-8">
+    <table class="table table-striped table-hover bg-white mt-3">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            {% for key in result.data[0].keys() %}
+            <th scope="col">{{ key }}</th>
+            {% endfor %}
+          </tr>
+        </thead>
+        <tbody>
+            {% for item in result.data %}
+            <tr>
+                <th scope="row">{{ loop.index }}</th>
+                {% for value in item %}
+                    <td>{{ value }}</td>
+                {% endfor %}
+              </tr>
+            {% endfor %}
+        </tbody>
+      </table>
+      </section>
+
+    {% endif %}
+    {% if not result.data %}
+        {% if result.success == True %}
+            <pr class="ml-3">No data</pr>
+        {% endif %}
+    {% endif %}
+  </section>
+  
+{% endblock %}

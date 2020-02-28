@@ -1,0 +1,13 @@
+{
+    "python.pythonPath": "C:\\Users\\bohda\\.virtualenvs\\kursova_bd-swZVvKc6\\Scripts\\python.exe",
+    "sqltools.connections": [
+        {
+            "database": "${workspaceFolder}\\instance/informsystem.sqlite",
+            "dialect": "SQLite",
+            "isActive": true,
+            "isConnected": true,
+            "name": "Kursova"
+        }
+    ],
+    "sqltools.useNodeRuntime": true
+}

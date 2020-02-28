@@ -1,3 +1,10 @@
+
+{% macro active_link(url) %}
+{% if c_module == url %}
+    active
+{% endif %}
+{% endmacro %}
+
 <!doctype html>
 <html lang="ua">
   <head>
@@ -10,20 +17,29 @@
     <title>{% block title %}{% endblock %} - ІС Мебельний магазин</title>
     </head>
     <body class="container-fluid d-flex flex-row p-0">
-            <nav class="col-12 col-md-1 p-0 vh-100">
+            <nav class="col-12 col-md-2 col-lg-1 p-0 vh-100">
                 <h5 class="logo-text-color text-center p-3">ІС "Мебельний магазин"</h5>
                 <hr>
-                <ul class="h6">
+                <ul class="h5">
+                    <li><a href="#">СТАТИСТИКА</a></li>
+                    <li class="{{ active_link('query') }}"><a href="{{ url_for('main.query') }}">ЗАПИТ</a></li>
                     <li><a href="#">НАБІР</a></li>
                     <li><a href="#">НАБОРИ</a></li>
-                    <li class="active"><a href="#" class="">О МЕБЕЛІ</a></li>
+                    <li class="{{ active_link('entity') }}"><a href="{{ url_for('entity.entity_list') }}">О МЕБЕЛІ</a></li>
                     <li><a href="#">ВИД</a></li>
                     <li><a href="#">ВИРОБНИК</a></li>
                     <li><a href="#">ПРОДАЖІ</a></li>
                 </ul>
                 <hr>
             </nav>
-        <section class="content">
+        <section class="d-flex flex-column col-12 px-0">
+            <div class="d-flex m-md-3 mt-md-5">
+                <form class="form d-flex flex-row col-12 col-md-8 my-2 my-lg-0">
+                    <input class="form-control mr-3" type="search" placeholder="Пошук мебелі за повним чи частковим співпадінням назви" aria-label="Search">
+                    <button class="btn btn-secondary my-2 my-sm-0" type="submit">Пошук</button>
+                    </div>
+              </form>
+            </div>
             {% block content %}{% endblock %}
         </section>
     </body>

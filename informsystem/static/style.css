@@ -46,3 +46,29 @@ nav ul li.active a {
 .logo-text-color{
     color: #A8A4A4;
 }
+
+header ul li a {
+    text-decoration: none;
+    color: #6A6767;
+    
+}
+
+ul.tabs li a.active {
+    border-bottom-style: solid;
+    border-color: #007BD9;
+    border-bottom-width: 0.1rem;
+}
+
+ul.tabs li a:hover{
+    text-decoration: none;
+    color: #6A6767;
+    border-bottom-style: solid;
+    border-color: #007BD9;
+    border-bottom-width: 0.1rem;
+}
+
+
+a.disabled, a.disabled:hover {
+    text-decoration: none;
+    color: #CFC6C6;
+}
