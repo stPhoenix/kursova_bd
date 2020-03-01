@@ -28,7 +28,10 @@ def create_app(test_config=None):
     db.init_app(app)
 
     from . import main, entity
+    from informsystem.entity import EntityList
+
     app.register_blueprint(main.bp)
     app.register_blueprint(entity.bp)
+    app.add_url_rule('/entity/list', view_func=EntityList.as_view('entity_list'))
 
     return app

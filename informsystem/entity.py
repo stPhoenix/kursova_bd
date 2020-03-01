@@ -22,45 +22,33 @@ list_query = 'SELECT E.F_Entity_ID,\
               FROM F_Entity E, F_Type T, F_Maker Mk, F_Material Mt\
               WHERE E.F_Type_ID = T.F_Type_ID\
               AND   E.F_Maker_ID = Mk.F_Maker_ID\
-              AND   E.F_Material_ID = Mt.F_Material_ID'
+              AND   E.F_Material_ID = Mt.F_Material_ID '
 detail_query = 'SELECT * FROM F_Entity E, F_Maker Mk, F_Type T, F_Material Mt WHERE E.F_Entity_ID=? \
                 AND Mk.F_Maker_ID=E.F_Maker_ID \
                 AND T.F_Type_ID=E.F_Type_ID \
                 AND Mt.F_Material_ID=E.F_Material_ID'
 
-@bp.route('/list', methods=('GET', 'POST'))
-def entity_list():
-    result = {'success': False, 'error': False, 'message': None, 'data': None}
-    all_query = list_query
+
+from .base_views import ListView
+
+
+class EntityList(ListView):
+    template_name = 'entity/list.html'
+    list_query=list_query
+    c_module = 'entity'
     sort_query = {
         'id_asc': ' ORDER BY E.F_Entity_ID ASC',
         'id_desc': ' ORDER BY E.F_Entity_ID DESC',
         'price_asc': ' ORDER BY E.F_Entity_Price ASC',
         'price_desc': ' ORDER BY E.F_Entity_Price DESC',
     }
-    args = []
-    try:
-        if request.args.get('sort'):
-               all_query += sort_query[request.args.get('sort')]
-        if request.method == 'POST':
-            for key, value in request.form.items(True):
-                all_query += ' AND ?=? '
-                args.append('E.'+key)
-                args.append(value)  
-        data = {}
-        data['f_type'] = query_db('SELECT * FROM F_Type')
-        data['f_maker'] = query_db('SELECT * FROM F_Maker')
-        data['f_material'] = query_db('SELECT * FROM F_Material')
-        data['list'] = query_db(all_query, tuple(args))
-        result['data'] = data
         
-        
-    except sqlite3.Error as e:
-        result['error'] = True
-        result['message'] = e.args[0]
 
-
-    return render_template('entity/list.html', c_module='entity', result=result)
+    def get_query_objects(self):
+        qo = (('f_type','SELECT * FROM F_Type'),
+              ('f_maker','SELECT * FROM F_Maker'),
+              ('f_material','SELECT * FROM F_Material'))
+        return qo
 
 @bp.route('/add', methods=('GET', 'POST'))
 def entity_add():
@@ -100,6 +88,10 @@ def entity_add():
         except sqlite3.Error as e:
             result['error'] = True
             result['message'] = e.args[0]
+        except sqlite3.Warning as e:
+            result['error'] = True
+            result['message'] = e.args[0]
+
     return render_template('entity/add.html', c_module='entity', result=result)
 
 @bp.route('/delete/<id>', methods=('GET',))

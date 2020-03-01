@@ -7,7 +7,7 @@
 {% block content %}
   <header class="mt-5 mx-md-5">
     <ul class="h6 d-flex flex-row tabs">
-      <li><a href="{{ url_for('entity.entity_list')}}" class="px-2 pb-1 active">СПИСОК</a></li>
+      <li><a href="{{ url_for('entity_list')}}" class="px-2 pb-1 active">СПИСОК</a></li>
       <li><a href="{{ url_for('entity.entity_add')}}" class="px-2 pb-1">ДОДАТИ</a></li>
       <li><a href="#" class="px-2 pb-1 disabled">ДЕТАЛЬНО</a></li>
     </ul>  
@@ -28,10 +28,10 @@
   <section class="d-flex flex-column h-100">
     <ul class=" d-flex flex-row my-1 ml-3">
       <li class="px-1">Cортувати за:</li> 
-      <li class="px-1"><a href="{{ url_for('entity.entity_list', sort='id_asc') }}">Зростанням ID</a></li>
-      <li class="px-1"><a href="{{ url_for('entity.entity_list', sort='id_desc') }}">Спаданням ID</a></li>
-      <li class="px-1"><a href="{{ url_for('entity.entity_list', sort='price_asc') }}">Зростанням Ціни</a></li>
-      <li class="px-1"><a href="{{ url_for('entity.entity_list', sort='price_desc') }}">Спаданням Ціни</a></li>
+      <li class="px-1"><a href="{{ url_for('entity_list', sort='id_asc') }}">Зростанням ID</a></li>
+      <li class="px-1"><a href="{{ url_for('entity_list', sort='id_desc') }}">Спаданням ID</a></li>
+      <li class="px-1"><a href="{{ url_for('entity_list', sort='price_asc') }}">Зростанням Ціни</a></li>
+      <li class="px-1"><a href="{{ url_for('entity_list', sort='price_desc') }}">Спаданням Ціни</a></li>
     </ul>
     <div class="col-12 d-flex flex-row">
     <section class="table-responsive col-12 col-md-8 col-lg-8">
@@ -71,7 +71,7 @@
     </section>
     <div class="">
       <h5 class="text-center">Фільтр</h5>
-      <form action="{{ url_for('entity.entity_list') }}" method="POST" class="d-flex flex-column ">
+      <form action="{{ url_for('entity_list') }}" method="POST" class="d-flex flex-column ">
         <div class="input-group mb-3">
           <div class="input-group-prepend">
             <label class="input-group-text" for="inputGroupType">Вид</label>
