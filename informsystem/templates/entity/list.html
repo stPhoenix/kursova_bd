@@ -8,7 +8,7 @@
   <header class="mt-5 mx-md-5">
     <ul class="h6 d-flex flex-row tabs">
       <li><a href="{{ url_for('entity_list')}}" class="px-2 pb-1 active">СПИСОК</a></li>
-      <li><a href="{{ url_for('entity.entity_add')}}" class="px-2 pb-1">ДОДАТИ</a></li>
+      <li><a href="{{ url_for('entity_add')}}" class="px-2 pb-1">ДОДАТИ</a></li>
       <li><a href="#" class="px-2 pb-1 disabled">ДЕТАЛЬНО</a></li>
     </ul>  
   </header>
@@ -61,8 +61,8 @@
                         <td>{{ value }}</td>
                     {% endfor %}
                     <td>
-                      <a href="{{ url_for('entity.entity_detail', id=item.f_entity_id) }}">Редагувати/Детально</a>
-                      <a href="{{ url_for('entity.entity_delete', id=item.f_entity_id) }}">Видалити</a>
+                      <a href="{{ url_for('entity_detail', id=item.f_entity_id) }}">Редагувати/Детально</a>
+                      <a href="{{ url_for('entity_delete', id=item.f_entity_id) }}">Видалити</a>
                     </td>
                   </tr>
                 {% endfor %}

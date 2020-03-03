@@ -8,8 +8,8 @@
 
     <header class="mt-5 mx-md-5">
     <ul class="h6 d-flex flex-row tabs">
-      <li><a href="{{ url_for('entity.entity_list')}}" class="px-2 pb-1">СПИСОК</a></li>
-      <li><a href="{{ url_for('entity.entity_add')}}" class="active px-2 pb-1">ДОДАТИ</a></li>
+      <li><a href="{{ url_for('entity_list')}}" class="px-2 pb-1">СПИСОК</a></li>
+      <li><a href="{{ url_for('entity_add')}}" class="active px-2 pb-1">ДОДАТИ</a></li>
       <li><a href="#" class="px-2 pb-1 disabled">ДЕТАЛЬНО</a></li>
     </ul>  
   </header>
@@ -26,7 +26,7 @@
 {% endif %}
 </section>
   <section class="">
-    <form class="form col-12 col-md-10 col-lg-8" action="{{ url_for('entity.entity_add') }}" method="POST">
+    <form class="form col-12 col-md-10 col-lg-8" action="{{ url_for('entity_add') }}" method="POST">
       <div class="input-group mb-3">
         <div class="input-group-prepend">
           <label class="input-group-text" for="inputGroupType">Вид</label>

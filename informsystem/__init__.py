@@ -28,10 +28,13 @@ def create_app(test_config=None):
     db.init_app(app)
 
     from . import main, entity
-    from informsystem.entity import EntityList
+    from informsystem.entity import EntityList, EntityDelete, EntityDetailUpdate, EntityAdd
 
     app.register_blueprint(main.bp)
     app.register_blueprint(entity.bp)
     app.add_url_rule('/entity/list', view_func=EntityList.as_view('entity_list'))
+    app.add_url_rule('/entity/delete/<id>', view_func=EntityDelete.as_view('entity_delete'))
+    app.add_url_rule('/entity/detail/<id>', view_func=EntityDetailUpdate.as_view('entity_detail'))
+    app.add_url_rule('/entity/add', view_func=EntityAdd.as_view('entity_add'))
 
     return app
