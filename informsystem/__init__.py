@@ -29,12 +29,32 @@ def create_app(test_config=None):
 
     from . import main, entity
     from informsystem.entity import EntityList, EntityDelete, EntityDetailUpdate, EntityAdd
+    from informsystem.f_type import F_TypeList, F_TypeDelete, F_TypeDetailUpdate, F_TypeAdd
+    from informsystem.f_maker import F_MakerList, F_MakerDelete, F_MakerDetailUpdate, F_MakerAdd
+    from informsystem.f_material import F_MaterialList, F_MaterialDelete, F_MaterialDetailUpdate, F_MaterialAdd
+    from informsystem.f_set import F_SetList, F_SetDelete, F_SetDetailUpdate, F_SetAdd
+
 
     app.register_blueprint(main.bp)
-    app.register_blueprint(entity.bp)
     app.add_url_rule('/entity/list', view_func=EntityList.as_view('entity_list'))
     app.add_url_rule('/entity/delete/<id>', view_func=EntityDelete.as_view('entity_delete'))
     app.add_url_rule('/entity/detail/<id>', view_func=EntityDetailUpdate.as_view('entity_detail'))
     app.add_url_rule('/entity/add', view_func=EntityAdd.as_view('entity_add'))
-
+    app.add_url_rule('/f_type/list', view_func=F_TypeList.as_view('f_type_list'))
+    app.add_url_rule('/f_type/delete/<id>', view_func=F_TypeDelete.as_view('f_type_delete'))
+    app.add_url_rule('/f_type/detail/<id>', view_func=F_TypeDetailUpdate.as_view('f_type_detail'))
+    app.add_url_rule('/f_type/add', view_func=F_TypeAdd.as_view('f_type_add'))
+    app.add_url_rule('/f_maker/list', view_func=F_MakerList.as_view('f_maker_list'))
+    app.add_url_rule('/f_maker/delete/<id>', view_func=F_MakerDelete.as_view('f_maker_delete'))
+    app.add_url_rule('/f_maker/detail/<id>', view_func=F_MakerDetailUpdate.as_view('f_maker_detail'))
+    app.add_url_rule('/f_maker/add', view_func=F_MakerAdd.as_view('f_maker_add'))
+    app.add_url_rule('/f_material/list', view_func=F_MaterialList.as_view('f_material_list'))
+    app.add_url_rule('/f_material/delete/<id>', view_func=F_MaterialDelete.as_view('f_material_delete'))
+    app.add_url_rule('/f_material/detail/<id>', view_func=F_MaterialDetailUpdate.as_view('f_material_detail'))
+    app.add_url_rule('/f_material/add', view_func=F_MaterialAdd.as_view('f_material_add'))
+    app.add_url_rule('/f_set/list', view_func=F_SetList.as_view('f_set_list'))
+    app.add_url_rule('/f_set/delete/<id>', view_func=F_SetDelete.as_view('f_set_delete'))
+    app.add_url_rule('/f_set/detail/<id>', view_func=F_SetDetailUpdate.as_view('f_set_detail'))
+    app.add_url_rule('/f_set/add', view_func=F_SetAdd.as_view('f_set_add'))
+    
     return app

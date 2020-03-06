@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Query
+{% endblock %}
+
+{% block content %}
+  <section class="ml-3">
+    {% if  result.success == True %}
+        <div class="alert alert-success col-11 col-md-7 com-lg-5" role="alert">
+            {{ result.message }}
+        </div>
+    {% endif %}
+    {% if  result.error == True %}
+        <div class="alert alert-danger col-11 col-md-7 com-lg-5" role="alert">
+            {{ result.message }}
+        </div>
+    {% endif %}
+    {% if result.data %}
+    <h2>Статистика</h2>
+    <h3>О мебелі: {{ result.data.f_entity[0] }}</h3>
+    <h3>Видів: {{ result.data.f_type[0] }}</h3>
+    <h3>Виробників: {{ result.data.f_maker[0] }}</h3>
+    <h3>Матеріалів: {{ result.data.f_material[0] }}</h3>
+    <h3>Наборів: {{ result.data.f_set[0] }}</h3>
+    <h3>Сетів: {{ result.data.f_sales[0] }}</h3>
+
+    {% endif %}
+    {% if not result.data %}
+        {% if result.success == True %}
+            <pr class="ml-3">No data</pr>
+        {% endif %}
+    {% endif %}
+  </section>
+  
+{% endblock %}

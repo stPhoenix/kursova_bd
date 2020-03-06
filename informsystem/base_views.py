@@ -58,16 +58,21 @@ class ListView(View):
                 session[self.sort_field] = request.args.get('sort')
             if self.sort_field not in session:
                 all_query += self.sort_query['default']
-                session[self.sort_field] = self.sort_query['default']
+                session[self.sort_field] = 'default'
+            temp_query=''
             if request.args.get('next'):
-                all_query += self.page_next_query[session[self.sort_field]]%(request.args.get('next')) + self.sort_query[session[self.sort_field]]
+                temp_query = self.page_next_query[session[self.sort_field]]%(request.args.get('next'))
+                all_query += temp_query + self.sort_query[session[self.sort_field]]
             if request.args.get('prev'):
-                all_query += self.page_next_query[session[self.sort_field]]%(request.args.get('prev')) + self.sort_query[session[self.sort_field]]
+                temp_query = self.page_next_query[session[self.sort_field]]%(request.args.get('prev'))
+                all_query += temp_query + self.sort_query[session[self.sort_field]]
+            if request.method == 'GET' and not request.args.get('next') and not request.args.get('prev') and not request.args.get('sort'):
+                all_query += self.sort_query[session[self.sort_field]]
             data = {}
             for item in self.get_query_objects():
                 data[item[0]] = query_db(item[1])
             data['list'] = query_db(all_query)
-            data['prev'] = data['list'][0][self.id_field]
+            data['prev'] = data['list'][0][self.id_field] if request.args.get('next') else 0                
             data['next'] = data['list'][-1][self.id_field]
 
             self.result['data'] = data

@@ -12,7 +12,20 @@ bp = Blueprint('main', __name__)
 
 @bp.route('/', methods=('GET', 'POST'))
 def main():
-    return render_template('main.html')
+    result = {'error': False, 'message': None, 'data': None}
+    try:
+        data = {}
+        data['f_entity'] = query_db('SELECT count(*) FROM F_Entity', one=True)
+        data['f_type'] = query_db('SELECT count(*) FROM F_Type', one=True)
+        data['f_maker'] = query_db('SELECT count(*) FROM F_Maker', one=True)
+        data['f_material'] = query_db('SELECT count(*) FROM F_Material', one=True)
+        data['f_set'] = query_db('SELECT count(*) FROM F_Set', one=True)
+        data['f_sales'] = query_db('SELECT count(*) FROM F_Sales', one=True)
+        result['data'] = data
+    except sqlite3.Error as e:
+        result['error'] = True
+        result['message'] = e.args[0]
+    return render_template('main.html', result=result, c_module='main')
 
 @bp.route('/query', methods=('GET', 'POST'))
 def query():

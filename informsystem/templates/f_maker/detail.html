@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Детально вид
+{% endblock %}
+
+{% block content %}
+
+    <header class="mt-5 mx-md-5">
+    <ul class="h6 d-flex flex-row tabs">
+      <li><a href="{{ url_for('f_maker_list')}}" class="px-2 pb-1">СПИСОК</a></li>
+      <li><a href="{{ url_for('f_maker_add')}}" class="px-2 pb-1">ДОДАТИ</a></li>
+      <li><a href="#" class="px-2 pb-1 active">ДЕТАЛЬНО</a></li>
+    </ul>  
+  </header>
+  <section class="ml-3">
+  {% if  result.success == True %}
+  <div class="alert alert-success col-11 col-md-7 com-lg-5" role="alert">
+      {{ result.message }}
+  </div>
+{% endif %}
+{% if  result.error == True %}
+  <div class="alert alert-danger col-11 col-md-7 com-lg-5" role="alert">
+      {{ result.message }}
+  </div>
+{% endif %}
+</section>
+  <section class="">
+    <form class="form col-12 col-md-10 col-lg-8" action="{{ request.path }}" method="POST">
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="basic-addon6">Назва</span>
+        </div>
+        <input value="{{ result.data.item.f_maker_name }}" name="f_maker_name" type="text" class="form-control" aria-label="Name" aria-describedby="basic-addon6">
+      </div>
+      <button class="btn btn-secondary" type="submit">Зберегти</button>
+    </form>
+  </section>
+{% endblock %}

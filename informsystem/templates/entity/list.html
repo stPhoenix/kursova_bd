@@ -68,6 +68,12 @@
                 {% endfor %}
             </tbody>
           </table>
+          <nav>
+            <ul class="pagination justify-content-center">
+              <li class="page-item"><a class="page-link" href="{{ url_for('entity_list', prev=result.data.prev) }}">Попередня</a></li>
+              <li class="page-item"><a class="page-link" href="{{ url_for('entity_list', next=result.data.next) }}">Наступна</a></li>
+            </ul>
+          </nav>
     </section>
     <div class="">
       <h5 class="text-center">Фільтр</h5>

@@ -8,7 +8,6 @@ from informsystem.db import get_db, query_db
 
 import sqlite3
 
-bp = Blueprint('entity', __name__, url_prefix='/entity')
 list_query = 'SELECT E.F_Entity_ID,\
                      E.F_Entity_Price,\
                      E.F_Entity_Quantity,\
@@ -44,19 +43,19 @@ class EntityList(ListView):
         'price_desc': ' ORDER BY E.F_Entity_Price DESC LIMIT 10 ',
     }
     page_next_query= {
-        'default': ' WHERE e.f_entity_id > %s ',
-        'id_asc': ' WHERE e.f_entity_id > %s ',
-        'id_desc': ' WHERE e.f_entity_id < %s ',
-        'price_asc': ' WHERE e.f_entity_id > %s ',
-        'price_desc': ' WHERE e.f_entity_id < %s ',
+        'default': ' AND e.f_entity_id > %s ',
+        'id_asc': ' AND e.f_entity_id > %s ',
+        'id_desc': ' AND e.f_entity_id < %s ',
+        'price_asc': ' AND e.f_entity_id > %s ',
+        'price_desc': ' AND e.f_entity_id < %s ',
     }
     page_prev_query={
-        'id_asc': ' WHERE e.f_entity_id < %s ',
-        'id_desc': ' WHERE e.f_entity_id > %s ',
-        'price_asc': ' WHERE e.f_entity_id < %s ',
-        'price_desc': ' WHERE e.f_entity_id > %s ',
+        'id_asc': ' AND e.f_entity_id < %s ',
+        'id_desc': ' AND e.f_entity_id > %s ',
+        'price_asc': ' AND e.f_entity_id < %s ',
+        'price_desc': ' AND e.f_entity_id > %s ',
     }
-    id_field='e.f_entity_id'
+    id_field='f_entity_id'
     filter_field='entity_filter'
     sort_field='entity_sort'
         
@@ -140,96 +139,3 @@ class EntityAdd(AddView):
                 'f_maker_id',
                 'f_material_id')
         return fn
-
-#@bp.route('/add', methods=('GET', 'POST'))
-def entity_add():
-    result = {'success': False, 'error': False, 'message': None, 'data': None}
-    try:
-        data = {}
-        data['f_type'] = query_db('SELECT * FROM F_Type')
-        data['f_maker'] = query_db('SELECT * FROM F_Maker')
-        data['f_material'] = query_db('SELECT * FROM F_Material')
-        result['data'] = data
-    except sqlite3.Error as e:
-        result['error'] = True
-        result['message'] = e.args[0]
-    
-    if request.method == 'POST':
-        try:
-            query_db('INSERT INTO F_Entity (F_Entity_Price,\
-                                            F_Entity_Quantity,\
-                                            F_Entity_Height,\
-                                            F_Entity_Width,\
-                                            F_Entity_Length,\
-                                            F_Entity_Color,\
-                                            F_Type_ID,\
-                                            F_Maker_ID,\
-                                            F_Material_ID) VALUES (?,?,?,?,?,?,?,?,?)', (request.form['price'],
-                                                                                request.form['quantity'],
-                                                                                request.form['height'],
-                                                                                request.form['width'],
-                                                                                request.form['length'],
-                                                                                request.form['color'],
-                                                                                request.form['f_type_id'],
-                                                                                request.form['f_maker_id'],
-                                                                                request.form['f_material_id']))
-            result['success'] = True
-            result['message'] = 'Success'
-
-        except sqlite3.Error as e:
-            result['error'] = True
-            result['message'] = e.args[0]
-        except sqlite3.Warning as e:
-            result['error'] = True
-            result['message'] = e.args[0]
-
-    return render_template('entity/add.html', c_module='entity', result=result)
-
-#@bp.route('/delete/<id>', methods=('GET',))
-def entity_delete(id):
-    result = {'success': False, 'error': False, 'message': None, 'data': None}
-    try:
-        query_db('DELETE FROM F_Entity WHERE F_Entity_ID=?', (id,))
-        return redirect(url_for('entity_list'))
-        
-    except sqlite3.Error as e:
-        result['error'] = True
-        result['message'] = e.args[0]
-    return render_template('entity/list.html', c_module='entity', result=result)
-
-#@bp.route('/detail/<id>', methods=('GET', 'POST'))
-def entity_detail(id):
-    result = {'success': False, 'error': False, 'message': None, 'data': None}
-    try:
-        data = {}
-        data['item'] = query_db(detail_query,(id,), True)
-        data['f_type'] = query_db('SELECT * FROM F_Type')
-        data['f_maker'] = query_db('SELECT * FROM F_Maker')
-        data['f_material'] = query_db('SELECT * FROM F_Material')
-        result['data'] = data
-        if request.method == 'POST':
-            query_db('UPDATE F_Entity SET   F_Entity_Price=?,\
-                                            F_Entity_Quantity=?,\
-                                            F_Entity_Height=?,\
-                                            F_Entity_Width=?,\
-                                            F_Entity_Length=?,\
-                                            F_Entity_Color=?,\
-                                            F_Type_ID=?,\
-                                            F_Maker_ID=?,\
-                                            F_Material_ID=?\
-                                       WHERE F_Entity_ID=?', (request.form['price'],
-                                                              request.form['quantity'],
-                                                              request.form['height'],
-                                                              request.form['width'],
-                                                              request.form['length'],                                                                       request.form['color'],
-                                                              request.form['f_type_id'],
-                                                              request.form['f_maker_id'],
-                                                              request.form['f_material_id'],
-                                                              id))
-            result['success'] = True
-            result['message'] = 'Updated'
-    except sqlite3.Error as e:
-        result['error'] = True
-        result['message'] = e.args[0]
-
-    return render_template('entity/detail.html', c_module='entity', result=result)

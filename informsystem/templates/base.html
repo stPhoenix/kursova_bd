@@ -21,13 +21,14 @@
                 <h5 class="logo-text-color text-center p-3">ІС "Мебельний магазин"</h5>
                 <hr>
                 <ul class="h5">
-                    <li><a href="#">СТАТИСТИКА</a></li>
+                    <li class="{{ active_link('main') }}"><a href="{{ url_for('main.main') }}">СТАТИСТИКА</a></li>
                     <li class="{{ active_link('query') }}"><a href="{{ url_for('main.query') }}">ЗАПИТ</a></li>
-                    <li><a href="#">НАБІР</a></li>
+                    <li class="{{ active_link('f_set') }}"><a href="{{ url_for('f_set_list') }}">НАБІР</a></li>
                     <li><a href="#">НАБОРИ</a></li>
                     <li class="{{ active_link('entity') }}"><a href="{{ url_for('entity_list') }}">О МЕБЕЛІ</a></li>
-                    <li><a href="#">ВИД</a></li>
-                    <li><a href="#">ВИРОБНИК</a></li>
+                    <li class="{{ active_link('f_type') }}"><a href="{{ url_for('f_type_list') }}">ВИД</a></li>
+                    <li class="{{ active_link('f_maker') }}"><a href="{{ url_for('f_maker_list') }}">ВИРОБНИК</a></li>
+                    <li class="{{ active_link('f_material') }}"><a href="{{ url_for('f_material_list') }}">МАТЕРІАЛ</a></li>
                     <li><a href="#">ПРОДАЖІ</a></li>
                 </ul>
                 <hr>
