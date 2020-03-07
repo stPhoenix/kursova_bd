@@ -4,6 +4,8 @@ from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for, request
 )
 
+from flask.views import View
+
 from informsystem.db import get_db, query_db
 
 import sqlite3
@@ -14,6 +16,18 @@ detail_query = 'SELECT * FROM F_Maker WHERE F_Maker_ID=?'
 
 from .base_views import ListView, DeleteView, DetailUpdateView, AddView
 
+class F_MakerSearch(View):
+    methods = ('GET', 'POST')
+    result = {'success': False, 'error': False, 'message': None, 'data': None}
+
+    def dispatch_request(self):
+        try:
+            sq = '%'+request.form['search']+'%'
+            self.result['data'] ={'list': query_db('SELECT * FROM F_Maker WHERE F_Maker_Name LIKE ?', (sq,))}
+        except sqlite3.Error as e:
+            self.result['error'] = True
+            self.result['message'] = e.args[0]
+        return render_template('f_maker/search.html', result=self.result, c_module='f_maker')
 
 class F_MakerList(ListView):
     template_name = 'f_maker/list.html'
@@ -52,6 +66,7 @@ class F_MakerDelete(DeleteView):
     template_name = 'f_maker/list.html'
     c_module = 'f_maker'
     delete_query = 'DELETE FROM F_Maker WHERE F_Maker_ID=?'
+    redirect_url='f_maker_list'
 
 
 

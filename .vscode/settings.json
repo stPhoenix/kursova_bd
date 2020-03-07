@@ -1,8 +1,8 @@
 {
-    "python.pythonPath": "C:\\Users\\bohda\\.virtualenvs\\kursova_bd-swZVvKc6\\Scripts\\python.exe",
+    "python.pythonPath": "C:\\Users\\bohda\\.virtualenvs\\kursova-ujlcf3Xn\\Scripts\\python.exe",
     "sqltools.connections": [
         {
-            "database": "${workspaceFolder}\\instance/informsystem.sqlite",
+            "database": "D:\\ptyhon\\kursova\\instance\\informsystem.sqlite",
             "dialect": "SQLite",
             "isActive": true,
             "isConnected": true,

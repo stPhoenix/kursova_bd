@@ -3,7 +3,7 @@ from random import randint
 query = 'INSERT INTO F_Entity(F_Entity_Price, F_Entity_Quantity, F_Entity_Height, F_Entity_Width, F_Entity_Length, F_Entity_Color, F_Type_ID, F_Maker_ID, F_Material_ID) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s); \n'
 maker = [1, 2, 3]
 material = [1, 2 ,3]
-f_type = [4, 5, 6, 7]
+f_type = [1, 2, 3, 4]
 color = ['"White"', '"Green"', '"Yellow"', '"Red"']
 
 with open('entity.sql', 'w') as f:

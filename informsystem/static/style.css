@@ -5,6 +5,9 @@ nav {
     background-color: #1E2437;
     color: #6A6767;
 }
+nav.paging {
+    background-color: #E5E5E6;
+}
 ul , li {
     list-style: none;
     padding: 0%;

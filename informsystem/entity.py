@@ -18,10 +18,10 @@ list_query = 'SELECT E.F_Entity_ID,\
                      T.F_Type_Name,\
                      Mk.F_Maker_Name,\
                      Mt.F_Material_Name\
-              FROM F_Entity E, F_Type T, F_Maker Mk, F_Material Mt\
-              WHERE E.F_Type_ID = T.F_Type_ID\
-              AND   E.F_Maker_ID = Mk.F_Maker_ID\
-              AND   E.F_Material_ID = Mt.F_Material_ID '
+              FROM F_Entity E\
+              JOIN F_Type T USING (F_Type_ID)\
+              JOIN F_Maker Mk USING (F_Maker_ID)\
+              JOIN F_Material Mt USING (F_Material_ID)'
 detail_query = 'SELECT * FROM F_Entity E, F_Maker Mk, F_Type T, F_Material Mt WHERE E.F_Entity_ID=? \
                 AND Mk.F_Maker_ID=E.F_Maker_ID \
                 AND T.F_Type_ID=E.F_Type_ID \
@@ -71,6 +71,7 @@ class EntityDelete(DeleteView):
     template_name = 'entity/list.html'
     c_module = 'entity'
     delete_query = 'DELETE FROM F_Entity WHERE F_Entity_ID=?'
+    redirect_url='entity_list'
 
 
 

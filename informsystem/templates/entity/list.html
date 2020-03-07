@@ -32,6 +32,7 @@
       <li class="px-1"><a href="{{ url_for('entity_list', sort='id_desc') }}">Спаданням ID</a></li>
       <li class="px-1"><a href="{{ url_for('entity_list', sort='price_asc') }}">Зростанням Ціни</a></li>
       <li class="px-1"><a href="{{ url_for('entity_list', sort='price_desc') }}">Спаданням Ціни</a></li>
+      <li class="px-1"><a href="{{ url_for('entity_list', reset_filter=true) }}">Скинути Фільтр</a></li>
     </ul>
     <div class="col-12 d-flex flex-row">
     <section class="table-responsive col-12 col-md-8 col-lg-8">
@@ -68,12 +69,12 @@
                 {% endfor %}
             </tbody>
           </table>
-          <nav>
+          <div>
             <ul class="pagination justify-content-center">
               <li class="page-item"><a class="page-link" href="{{ url_for('entity_list', prev=result.data.prev) }}">Попередня</a></li>
               <li class="page-item"><a class="page-link" href="{{ url_for('entity_list', next=result.data.next) }}">Наступна</a></li>
             </ul>
-          </nav>
+          </div>
     </section>
     <div class="">
       <h5 class="text-center">Фільтр</h5>

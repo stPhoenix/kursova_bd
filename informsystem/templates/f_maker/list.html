@@ -5,6 +5,14 @@
 {% endblock %}
 
 {% block content %}
+<div class="d-flex m-md-3 mt-md-5">
+  <form class="form d-flex flex-row col-12 col-md-8 my-2 my-lg-0" method="POST" action="{{ url_for('f_maker_search') }}">
+      <input class="form-control mr-3" type="search" name="search" placeholder="Пошук виробника за повним чи частковим співпадінням назви" aria-label="Search">
+      <button class="btn btn-secondary my-2 my-sm-0" type="submit">Пошук</button>
+      </div>
+</form>
+</div>
+
   <header class="mt-5 mx-md-5">
     <ul class="h6 d-flex flex-row tabs">
       <li><a href="{{ url_for('f_maker_list')}}" class="px-2 pb-1 active">СПИСОК</a></li>
@@ -59,12 +67,12 @@
                 {% endfor %}
             </tbody>
           </table>
-          <nav>
+          <div>
             <ul class="pagination justify-content-center">
               <li class="page-item"><a class="page-link" href="{{ url_for('f_maker_list', prev=result.data.prev) }}">Попередня</a></li>
               <li class="page-item"><a class="page-link" href="{{ url_for('f_maker_list', next=result.data.next) }}">Наступна</a></li>
             </ul>
-          </nav>
+          </div>
   {% else %}
   <h3>No data</h3>
   {% endif %}

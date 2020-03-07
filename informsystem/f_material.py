@@ -52,6 +52,7 @@ class F_MaterialDelete(DeleteView):
     template_name = 'f_material/list.html'
     c_module = 'f_material'
     delete_query = 'DELETE FROM F_Material WHERE F_Material_ID=?'
+    redirect_url='f_material_list'
 
 
 

@@ -5,11 +5,20 @@
 {% endblock %}
 
 {% block content %}
+<div class="d-flex m-md-3 mt-md-5">
+  <form class="form d-flex flex-row col-12 col-md-8 my-2 my-lg-0" method="POST" action="{{ url_for('f_maker_search') }}">
+      <input class="form-control mr-3" type="search" name="search" placeholder="Пошук виробника за повним чи частковим співпадінням назви" aria-label="Search">
+      <button class="btn btn-secondary my-2 my-sm-0" type="submit">Пошук</button>
+      </div>
+</form>
+</div>
+
   <header class="mt-5 mx-md-5">
     <ul class="h6 d-flex flex-row tabs">
-      <li><a href="{{ url_for('f_type_list')}}" class="px-2 pb-1 active">СПИСОК</a></li>
-      <li><a href="{{ url_for('f_type_add')}}" class="px-2 pb-1">ДОДАТИ</a></li>
+      <li><a href="{{ url_for('f_maker_list')}}" class="px-2 pb-1">СПИСОК</a></li>
+      <li><a href="{{ url_for('f_maker_add')}}" class="px-2 pb-1">ДОДАТИ</a></li>
       <li><a href="#" class="px-2 pb-1 disabled">ДЕТАЛЬНО</a></li>
+      <li><a href="#" class="px-2 pb-1 active">ПОШУК</a></li>
     </ul>  
   </header>
   <section class="ml-3">
@@ -26,13 +35,6 @@
   </section>
   {% if result.data %}
   <section class="d-flex flex-column h-100">
-    <ul class=" d-flex flex-row my-1 ml-3">
-      <li class="px-1">Cортувати за:</li> 
-      <li class="px-1"><a href="{{ url_for('f_type_list', sort='id_asc') }}">Зростанням ID</a></li>
-      <li class="px-1"><a href="{{ url_for('f_type_list', sort='id_desc') }}">Спаданням ID</a></li>
-      <li class="px-1"><a href="{{ url_for('f_type_list', sort='name_asc') }}">Зростанням Назви</a></li>
-      <li class="px-1"><a href="{{ url_for('f_type_list', sort='name_desc') }}">Спаданням Назви</a></li>
-    </ul>
     <div class="col-12 d-flex flex-row">
     <section class="table-responsive col-12 col-md-8 col-lg-8">
         <table class="table table-sm table-striped bg-white">
@@ -52,19 +54,19 @@
                         <td>{{ value }}</td>
                     {% endfor %}
                     <td>
-                      <a href="{{ url_for('f_type_detail', id=item.f_type_id) }}">Редагувати/Детально</a>
-                      <a href="{{ url_for('f_type_delete', id=item.f_type_id) }}">Видалити</a>
+                      <a href="{{ url_for('f_maker_detail', id=item.f_maker_id) }}">Редагувати/Детально</a>
+                      <a href="{{ url_for('f_maker_delete', id=item.f_maker_id) }}">Видалити</a>
                     </td>
                   </tr>
                 {% endfor %}
             </tbody>
           </table>
-          <div>
+          <nav>
             <ul class="pagination justify-content-center">
-              <li class="page-item"><a class="page-link" href="{{ url_for('f_type_list', prev=result.data.prev) }}">Попередня</a></li>
-              <li class="page-item"><a class="page-link" href="{{ url_for('f_type_list', next=result.data.next) }}">Наступна</a></li>
+              <li class="page-item"><a class="page-link" href="{{ url_for('f_maker_list', prev=result.data.prev) }}">Попередня</a></li>
+              <li class="page-item"><a class="page-link" href="{{ url_for('f_maker_list', next=result.data.next) }}">Наступна</a></li>
             </ul>
-          </div>
+          </nav>
   {% else %}
   <h3>No data</h3>
   {% endif %}

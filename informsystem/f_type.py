@@ -52,6 +52,7 @@ class F_TypeDelete(DeleteView):
     template_name = 'f_type/list.html'
     c_module = 'f_type'
     delete_query = 'DELETE FROM F_Type WHERE F_Type_ID=?'
+    redirect_url = 'f_type_list'
 
 
 

@@ -52,7 +52,7 @@ class F_SetDelete(DeleteView):
     template_name = 'f_set/list.html'
     c_module = 'f_set'
     delete_query = 'DELETE FROM F_Set WHERE F_Set_ID=?'
-
+    redirect_url='f_set_list'
 
 
 class F_SetDetailUpdate(DetailUpdateView):

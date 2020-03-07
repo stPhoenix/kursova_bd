@@ -10,13 +10,23 @@ from informsystem.db import get_db, query_db
 
 import sqlite3
 
-
-class ListView(View):
-    methods = ['GET', 'POST']
+class BaseView(View):
     result = {'success': False, 'error': False, 'message': None, 'data': None}
     template_name=None
-    list_query=None
     c_module=None
+
+    def reset_result(self):
+        self.result = {'success': False, 'error': False, 'message': None, 'data': None}
+    
+    def get_query_objects(self):
+        return NotImplementedError()
+
+    def get_form_names(self):
+        return NotImplementedError()
+
+class ListView(BaseView):
+    methods = ['GET', 'POST']
+    list_query=None
     sort_query=None
     page_next_query=None
     page_prev_query=None
@@ -33,7 +43,7 @@ class ListView(View):
             keys_copy = keys.copy()
             temp_query = ''
             if head:
-                temp_query += query+' AND e.%s=%s '%(key, item)
+                temp_query += query+' AND e.%s=%s '%(key, item) # TODO: fix table prefix name
                 qs = []
                 self.filter_query(keys_copy, form, temp_query, False, qs)
             else:
@@ -44,6 +54,7 @@ class ListView(View):
 
 
     def dispatch_request(self):
+        self.reset_result()
         all_query = self.list_query
         try:
             if request.method == 'POST':
@@ -72,8 +83,9 @@ class ListView(View):
             for item in self.get_query_objects():
                 data[item[0]] = query_db(item[1])
             data['list'] = query_db(all_query)
-            data['prev'] = data['list'][0][self.id_field] if request.args.get('next') else 0                
-            data['next'] = data['list'][-1][self.id_field]
+            if data['list']:
+                data['prev'] = data['list'][0][self.id_field] if request.args.get('next') else 0                
+                data['next'] = data['list'][-1][self.id_field]
 
             self.result['data'] = data
         
@@ -85,21 +97,17 @@ class ListView(View):
         return render_template(self.template_name, c_module=self.c_module, result=self.result)
 
 
-    def get_query_objects(self):
-        raise NotImplementedError()
 
-
-class DeleteView(View):
+class DeleteView(BaseView):
     methods = ['GET']
-    result = {'success': False, 'error': False, 'message': None, 'data': None}
-    template_name=None
-    c_module=None
     delete_query=None
+    redirect_url=None
 
     def dispatch_request(self, id):
+        self.reset_result()
         try:
             query_db(self.delete_query, (id,))
-            return redirect(url_for('entity_list'))
+            return redirect(url_for(self.redirect_url))
         
         except sqlite3.Error as e:
             self.result['error'] = True
@@ -107,15 +115,13 @@ class DeleteView(View):
             return render_template(self.template_name, c_module=self.c_module, result=self.result)
 
 
-class DetailUpdateView(View):
+class DetailUpdateView(BaseView):
     methods = ['GET', 'POST']
-    result = {'success': False, 'error': False, 'message': None, 'data': None}
-    template_name=None
-    c_module=None
     update_query=None
     detail_query=None
 
     def dispatch_request(self, id):
+        self.reset_result()
         try:
             data = {}
             data['item'] = query_db(self.detail_query,(id,), True)
@@ -136,21 +142,13 @@ class DetailUpdateView(View):
 
         return render_template(self.template_name, c_module=self.c_module, result=self.result)
 
-    def get_query_objects(self):
-        return NotImplementedError()
 
-    def get_form_names(self):
-        return NotImplementedError()
-
-
-class AddView(View):
+class AddView(BaseView):
     methods = ['GET', 'POST']
-    result = {'success': False, 'error': False, 'message': None, 'data': None}
-    template_name=None
-    c_module=None
     insert_query=None
 
     def dispatch_request(self):
+        self.reset_result()
         try:
             data = {}
             for item in self.get_query_objects():
@@ -159,6 +157,9 @@ class AddView(View):
             if request.method == 'POST':
                 form_args = []
                 for key in self.get_form_names():
+                    if request.form[key] == '':
+                        form_args.append(None)
+                        continue
                     form_args.append(request.form[key])
                 query_db(self.insert_query, tuple(form_args))
                 self.result['success'] = True

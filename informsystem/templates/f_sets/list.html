@@ -7,8 +7,8 @@
 {% block content %}
   <header class="mt-5 mx-md-5">
     <ul class="h6 d-flex flex-row tabs">
-      <li><a href="{{ url_for('f_set_list')}}" class="px-2 pb-1 active">СПИСОК</a></li>
-      <li><a href="{{ url_for('f_set_add')}}" class="px-2 pb-1">ДОДАТИ</a></li>
+      <li><a href="{{ url_for('f_sets_list')}}" class="px-2 pb-1 active">СПИСОК</a></li>
+      <li><a href="{{ url_for('f_sets_add')}}" class="px-2 pb-1">ДОДАТИ</a></li>
       <li><a href="#" class="px-2 pb-1 disabled">ДЕТАЛЬНО</a></li>
     </ul>  
   </header>
@@ -28,10 +28,10 @@
   <section class="d-flex flex-column h-100">
     <ul class=" d-flex flex-row my-1 ml-3">
       <li class="px-1">Cортувати за:</li> 
-      <li class="px-1"><a href="{{ url_for('f_set_list', sort='id_asc') }}">Зростанням ID</a></li>
-      <li class="px-1"><a href="{{ url_for('f_set_list', sort='id_desc') }}">Спаданням ID</a></li>
-      <li class="px-1"><a href="{{ url_for('f_set_list', sort='name_asc') }}">Зростанням Назви</a></li>
-      <li class="px-1"><a href="{{ url_for('f_set_list', sort='name_desc') }}">Спаданням Назви</a></li>
+      <li class="px-1"><a href="{{ url_for('f_sets_list', sort='set_id_asc') }}">Зростанням ID Набору</a></li>
+      <li class="px-1"><a href="{{ url_for('f_sets_list', sort='set_id_desc') }}">Спаданням ID Набору</a></li>
+      <li class="px-1"><a href="{{ url_for('f_sets_list', sort='entity_id_asc') }}">Зростанням ID О Мебелі</a></li>
+      <li class="px-1"><a href="{{ url_for('f_sets_list', sort='entity_id_desc') }}">Спаданням ID О Мебелі</a></li>
     </ul>
     <div class="col-12 d-flex flex-row">
     <section class="table-responsive col-12 col-md-8 col-lg-8">
@@ -39,8 +39,8 @@
             <thead>
               <tr>
                 <th scope="col">#</th>
-                <th scope="col">ID</th>
-                <th scope="col">Назва</th>
+                <th scope="col">ID Набору</th>
+                <th scope="col">ID О Мебелі</th>
                 
               </tr>
             </thead>
@@ -48,12 +48,11 @@
                 {% for item in result.data.list %}
                 <tr>
                     <th scope="row">{{ loop.index }}</th>
-                    {% for value in item %}
-                        <td>{{ value }}</td>
-                    {% endfor %}
+                    <td><a href="{{ url_for('f_set_detail', id=item.f_set_id ) }}">{{ item.f_set_id }}</a></td>
+                    <td><a href="{{ url_for('entity_detail', id=item.f_entity_id ) }}">{{ item.f_entity_id }}</a></td>
                     <td>
-                      <a href="{{ url_for('f_set_detail', id=item.f_set_id) }}">Редагувати/Детально</a>
-                      <a href="{{ url_for('f_set_delete', id=item.f_set_id) }}">Видалити</a>
+                      <a href="{{ url_for('f_sets_detail', e_id=item.f_entity_id, s_id=item.f_set_id) }}">Редагувати/Детально</a>
+                      <a href="{{ url_for('f_sets_delete', s_id=item.f_set_id, e_id=item.f_entity_id) }}">Видалити</a>
                     </td>
                   </tr>
                 {% endfor %}
@@ -61,8 +60,8 @@
           </table>
           <div>
             <ul class="pagination justify-content-center">
-              <li class="page-item"><a class="page-link" href="{{ url_for('f_set_list', prev=result.data.prev) }}">Попередня</a></li>
-              <li class="page-item"><a class="page-link" href="{{ url_for('f_set_list', next=result.data.next) }}">Наступна</a></li>
+              <li class="page-item"><a class="page-link" href="{{ url_for('f_sets_list', prev=result.data.prev) }}">Попередня</a></li>
+              <li class="page-item"><a class="page-link" href="{{ url_for('f_sets_list', next=result.data.next) }}">Наступна</a></li>
             </ul>
           </div>
   {% else %}
