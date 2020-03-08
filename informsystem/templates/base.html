@@ -16,8 +16,8 @@
 
     <title>{% block title %}{% endblock %} - ІС Мебельний магазин</title>
     </head>
-    <body class="container-fluid d-flex flex-row p-0">
-            <nav class="col-12 col-md-2 col-lg-1 p-0 vh-100">
+    <body class="container-fluid d-flex flex-column flex-md-row p-0">
+            <nav class="col-12 col-md-3 col-lg-2 col-xl-1 p-0 vh-100">
                 <h5 class="logo-text-color text-center p-3">ІС "Мебельний магазин"</h5>
                 <hr>
                 <ul class="h5">
@@ -33,7 +33,7 @@
                 </ul>
                 <hr>
             </nav>
-        <section class="d-flex flex-column col-12 px-0">
+        <section class="d-flex flex-column col-12 px-0 mt-3">
             {% block content %}{% endblock %}
         </section>
     </body>

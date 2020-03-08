@@ -6,7 +6,7 @@
 
 {% block content %}
   <header class="mt-5 mx-md-5">
-    <ul class="h6 d-flex flex-row tabs">
+    <ul class="h6 d-flex flex-row tabs justify-content-center justify-content-md-start">
       <li><a href="{{ url_for('f_material_list')}}" class="px-2 pb-1 active">СПИСОК</a></li>
       <li><a href="{{ url_for('f_material_add')}}" class="px-2 pb-1">ДОДАТИ</a></li>
       <li><a href="#" class="px-2 pb-1 disabled">ДЕТАЛЬНО</a></li>
@@ -26,15 +26,15 @@
   </section>
   {% if result.data %}
   <section class="d-flex flex-column h-100">
-    <ul class=" d-flex flex-row my-1 ml-3">
+    <ul class=" d-flex flex-column flex-md-row my-1 ml-3">
       <li class="px-1">Cортувати за:</li> 
       <li class="px-1"><a href="{{ url_for('f_material_list', sort='id_asc') }}">Зростанням ID</a></li>
       <li class="px-1"><a href="{{ url_for('f_material_list', sort='id_desc') }}">Спаданням ID</a></li>
       <li class="px-1"><a href="{{ url_for('f_material_list', sort='name_asc') }}">Зростанням Назви</a></li>
       <li class="px-1"><a href="{{ url_for('f_material_list', sort='name_desc') }}">Спаданням Назви</a></li>
     </ul>
-    <div class="col-12 d-flex flex-row">
-    <section class="table-responsive col-12 col-md-8 col-lg-8">
+    <div class="col-12 d-flex flex-column flex-md-row">
+      <section class="table-responsive col-12 col-md-8 col-lg-8">
         <table class="table table-sm table-striped bg-white">
             <thead>
               <tr>
