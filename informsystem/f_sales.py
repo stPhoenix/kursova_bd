@@ -60,15 +60,20 @@ class F_SalesDetailUpdate(DetailUpdateView):
     template_name='f_sales/detail.html'
     c_module='f_sales'
     detail_query=detail_query
-    update_query='UPDATE F_Sales SET   F_Sales_Name=?\
-                                WHERE  F_Sales_ID=?'
+    update_query='UPDATE F_Sales SET F_Sales_Quantity=?, \
+                                     F_Entity_ID=?, \
+                                     F_Entity_Date=? \
+                               WHERE F_Sales_ID=?'
     
     def get_query_objects(self):
         qo = ()
         return qo
 
     def get_form_names(self):
-        fn =   ('f_sales_name',)
+        fn =   ('f_sales_quantity',
+                'f_entity_id',
+                'f_entity_date',
+                )
         return fn
 
 
@@ -87,3 +92,25 @@ class F_SalesAdd(AddView):
                 'f_entity_id',
                 'f_entity_date')
         return fn
+    
+
+    def dispatch_request(self):
+        if request.method == 'POST':
+            try:
+                fid = request.form['f_entity_id']
+                quantity = int(query_db('SELECT f_entity_quantity FROM F_Entity WHERE F_Entity_ID=?',(fid,),True)[0])
+                new_quantity = quantity - int(request.form['f_sales_quantity'])
+                if  new_quantity < 0:
+                    self.result['error'] = True
+                    self.result['message'] = 'Придбаних одиниць більше ніж в наявності!'
+                    return render_template(self.template_name, c_module=self.c_module, result=self.result)
+                else:
+                    query_db('UPDATE F_Entity SET F_Entity_Quantity=? WHERE F_Entity_ID=?', (new_quantity, fid))
+                    return super().dispatch_request()
+
+            except sqlite3.Error as e:
+                self.result['error'] = True
+                self.result['message'] = e.args[0]
+                return render_template(self.template_name, c_module=self.c_module, result=self.result)
+        else:
+            return super().dispatch_request()

@@ -124,10 +124,7 @@ class DetailUpdateView(BaseView):
         self.reset_result()
         try:
             data = {}
-            data['item'] = query_db(self.detail_query,(id,), True)
-            for item in self.get_query_objects():
-                data[item[0]] = query_db(item[1])
-            self.result['data'] = data
+           
             if request.method == 'POST':
                 form_args = []
                 for key in self.get_form_names():
@@ -136,6 +133,11 @@ class DetailUpdateView(BaseView):
                 query_db(self.update_query, tuple(form_args))
                 self.result['success'] = True
                 self.result['message'] = 'Updated'
+            data['item'] = query_db(self.detail_query,(id,), True)
+            for item in self.get_query_objects():
+                data[item[0]] = query_db(item[1])
+            self.result['data'] = data
+                
         except sqlite3.Error as e:
             self.result['error'] = True
             self.result['message'] = e.args[0]
