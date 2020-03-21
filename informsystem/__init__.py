@@ -1,6 +1,7 @@
 import os
 
 from flask import Flask
+import flask_excel as excel
 
 
 def create_app(test_config=None):
@@ -69,5 +70,7 @@ def create_app(test_config=None):
     app.add_url_rule('/f_sets/delete/<s_id>/<e_id>', view_func=F_SetsDelete.as_view('f_sets_delete'))
     app.add_url_rule('/f_sets/detail/<s_id>/<e_id>', view_func=F_SetsDetailUpdate.as_view('f_sets_detail'))
     app.add_url_rule('/f_sets/add', view_func=F_SetsAdd.as_view('f_sets_add'))
+    
+    excel.init_excel(app)
     
     return app

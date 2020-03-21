@@ -7,6 +7,8 @@ from flask import (
 from informsystem.db import get_db, query_db
 
 import sqlite3
+import flask_excel as excel
+
 
 bp = Blueprint('main', __name__)
 
@@ -42,3 +44,51 @@ def query():
 
 
     return render_template('query.html', result=result, c_module='query')
+
+
+@bp.route('/download/f_entity', methods=('GET',))
+def download():
+    data = {}
+    data['items'] = query_db('SELECT count(*) FROM F_Entity',one=True)
+    data['quantity'] = query_db('SELECT SUM(f_entity_quantity) FROM F_Entity', one=True)
+    data['types'] = query_db('SELECT * FROM F_Type')
+    data['t_quantity'] = query_db('SELECT f_type_id, count(*) FROM F_Entity GROUP BY f_type_id')
+
+    f_types = {}
+    for fid, name in data['types']:
+        f_types[fid] = name
+
+    d = [
+        ["Рядків одиниць мебелі", data['items'][0]],
+        [" "],
+        ["Загальна кількість мебелі", data['quantity'][0]],
+        [" "],
+        ["Назва виду", "Кількість"]
+    ]
+
+    for fid, quantity in data['t_quantity']:
+        d.append([f_types[fid], quantity])
+
+    return excel.make_response_from_array(d, "xls")
+
+
+@bp.route('/download/f_sales', methods=('GET',))
+def download_sales():
+    data = {}
+    data['items'] = query_db('SELECT count(*) FROM F_Sales',one=True)
+    data['quantity'] = query_db('SELECT SUM(f_sales_quantity) FROM F_Sales', one=True)
+    data['best_sales'] = query_db('SELECT f_entity_date, f_sales_quantity FROM F_Sales ORDER BY f_sales_quantity DESC LIMIT 10')
+
+    d = [
+        ["Рядків продажів", data['items'][0]],
+        [" "],
+        ["Загальна кількість проданих о мебелі", data['quantity'][0]],
+        [" "],
+        ["ТОП 10 продажів"],
+        ["Дата", "Кількість"]
+    ]
+
+    for date, quantity in data['best_sales']:
+        d.append([date, quantity])
+
+    return excel.make_response_from_array(d, "xls")

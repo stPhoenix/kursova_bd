@@ -1,36 +1,65 @@
 {% extends 'base.html' %}
 
 {% block title %}
-Query
+Статистика
 {% endblock %}
 
 {% block content %}
-  <section class="ml-3">
+<section class="ml-3">
     {% if  result.success == True %}
-        <div class="alert alert-success col-11 col-md-7 com-lg-5" role="alert">
-            {{ result.message }}
-        </div>
+    <div class="alert alert-success col-11 col-md-7 com-lg-5" role="alert">
+        {{ result.message }}
+    </div>
     {% endif %}
     {% if  result.error == True %}
-        <div class="alert alert-danger col-11 col-md-7 com-lg-5" role="alert">
-            {{ result.message }}
-        </div>
+    <div class="alert alert-danger col-11 col-md-7 com-lg-5" role="alert">
+        {{ result.message }}
+    </div>
     {% endif %}
     {% if result.data %}
-    <h2>Статистика</h2>
-    <h3>О мебелі: {{ result.data.f_entity[0] }}</h3>
-    <h3>Видів: {{ result.data.f_type[0] }}</h3>
-    <h3>Виробників: {{ result.data.f_maker[0] }}</h3>
-    <h3>Матеріалів: {{ result.data.f_material[0] }}</h3>
-    <h3>Наборів: {{ result.data.f_set[0] }}</h3>
-    <h3>Продажів: {{ result.data.f_sales[0] }}</h3>
+    <section class="table-responsive col-12 col-md-8 col-lg-8 mt-3">
+        <table class="table table-sm table-striped bg-white">
+            <thead>
+                <tr>
+                    <th scope="col">Статистика</th>
+                    <th scope="col">Кількість</th>
 
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row">О мебелі</th>
+                    <td>{{ result.data.f_entity[0] }}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Видів</th>
+                    <td>{{ result.data.f_type[0] }}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Виробників</th>
+                    <td>{{ result.data.f_maker[0] }}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Матеріалів</th>
+                    <td> {{ result.data.f_material[0] }}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Наборів</th>
+                    <td>{{ result.data.f_set[0] }}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Продажів</th>
+                    <td>{{ result.data.f_sales[0] }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
     {% endif %}
     {% if not result.data %}
-        {% if result.success == True %}
-            <pr class="ml-3">No data</pr>
-        {% endif %}
+    {% if result.success == True %}
+    <pr class="ml-3">No data</pr>
     {% endif %}
-  </section>
-  
+    {% endif %}
+</section>
+
 {% endblock %}

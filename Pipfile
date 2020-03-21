@@ -9,6 +9,8 @@ pylint = "*"
 [packages]
 flask = "*"
 python-dotenv = "*"
+flask-excel = "*"
+pyexcel-xls = "*"
 
 [requires]
 python_version = "3.8"
