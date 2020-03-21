@@ -17,43 +17,47 @@
     </div>
     {% endif %}
     {% if result.data %}
-    <section class="table-responsive col-12 col-md-8 col-lg-8 mt-3">
-        <table class="table table-sm table-striped bg-white">
-            <thead>
-                <tr>
-                    <th scope="col">Статистика</th>
-                    <th scope="col">Кількість</th>
-
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <th scope="row">О мебелі</th>
-                    <td>{{ result.data.f_entity[0] }}</td>
-                </tr>
-                <tr>
-                    <th scope="row">Видів</th>
-                    <td>{{ result.data.f_type[0] }}</td>
-                </tr>
-                <tr>
-                    <th scope="row">Виробників</th>
-                    <td>{{ result.data.f_maker[0] }}</td>
-                </tr>
-                <tr>
-                    <th scope="row">Матеріалів</th>
-                    <td> {{ result.data.f_material[0] }}</td>
-                </tr>
-                <tr>
-                    <th scope="row">Наборів</th>
-                    <td>{{ result.data.f_set[0] }}</td>
-                </tr>
-                <tr>
-                    <th scope="row">Продажів</th>
-                    <td>{{ result.data.f_sales[0] }}</td>
-                </tr>
-            </tbody>
-        </table>
-    </section>
+    <table class="table col-12 col-md-6 col-lg-3 col-xl-1">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Назва</th>
+            <th scope="col">Кількість</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">1</th>
+            <td>О мебелі</td>
+            <td>{{ result.data.f_entity[0] }}</td>
+          </tr>
+          <tr>
+            <th scope="row">2</th>
+            <td>Видів</td>
+            <td>{{ result.data.f_type[0] }}</td>
+          </tr>
+          <tr>
+            <th scope="row">3</th>
+            <td>Виробників</td>
+            <td>{{ result.data.f_maker[0] }}</td>
+          </tr>
+          <tr>
+            <th scope="row">4</th>
+            <td>Матеріалів</td>
+            <td>{{ result.data.f_material[0] }}</td>
+          </tr>
+          <tr>
+            <th scope="row">5</th>
+            <td>Наборів</td>
+            <td>{{ result.data.f_set[0] }}</td>
+          </tr>
+          <tr>
+            <th scope="row">6</th>
+            <td>Продажів</td>
+            <td>{{ result.data.f_sales[0] }}</td>
+          </tr>
+        </tbody>
+      </table>
     {% endif %}
     {% if not result.data %}
     {% if result.success == True %}
