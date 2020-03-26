@@ -10,6 +10,8 @@ from informsystem.db import get_db, query_db
 
 import sqlite3
 
+from werkzeug.datastructures import MultiDict
+
 class BaseView(View):
     result = {'success': False, 'error': False, 'message': None, 'data': None}
     template_name=None
@@ -39,12 +41,12 @@ class ListView(BaseView):
             results.append(self.list_query+query)
             return
         key = keys.pop()
+        qs = []
         for item in form.getlist(key):
             keys_copy = keys.copy()
             temp_query = ''
             if head:
-                temp_query += query+' AND e.%s=%s '%(key, item) # TODO: fix table prefix name
-                qs = []
+                temp_query += query+' WHERE e.%s=%s '%(key, item) # TODO: fix table prefix name
                 self.filter_query(keys_copy, form, temp_query, False, qs)
             else:
                 temp_query+=query+' AND e.%s=%s '% (key, item)
@@ -58,12 +60,12 @@ class ListView(BaseView):
         all_query = self.list_query
         try:
             if request.method == 'POST':
-                session[self.filter_field] = request.form
+                session[self.filter_field] = MultiDict(request.form)
             if request.args.get('reset_filter'):
                 session.pop(self.filter_field, None)
             if self.filter_field in session:
-                keys = list(request.form.keys())
-                all_query = self.filter_query(keys, request.form)
+                keys = list(session[self.filter_field].keys())
+                all_query = self.filter_query(keys, MultiDict(session[self.filter_field]))
             if request.args.get('sort'):
                 all_query += self.sort_query[request.args.get('sort')]
                 session[self.sort_field] = request.args.get('sort')
