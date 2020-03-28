@@ -49,7 +49,7 @@ class ListView(BaseView):
                 temp_query += query+' WHERE e.%s=%s '%(key, item) # TODO: fix table prefix name
                 self.filter_query(keys_copy, form, temp_query, False, qs)
             else:
-                temp_query+=query+' AND e.%s=%s '% (key, item)
+                temp_query+=query+' AND e.%s=%s '% (key, item) # TODO: fix table prefix name
                 self.filter_query(keys_copy, form, temp_query, False, results)    
         if head:
             return ' UNION '.join(qs)
@@ -58,6 +58,8 @@ class ListView(BaseView):
     def dispatch_request(self):
         self.reset_result()
         all_query = self.list_query
+        next = 2
+        prev = 1
         try:
             if request.method == 'POST':
                 session[self.filter_field] = MultiDict(request.form)
@@ -67,27 +69,31 @@ class ListView(BaseView):
                 keys = list(session[self.filter_field].keys())
                 all_query = self.filter_query(keys, MultiDict(session[self.filter_field]))
             if request.args.get('sort'):
-                all_query += self.sort_query[request.args.get('sort')]
                 session[self.sort_field] = request.args.get('sort')
             if self.sort_field not in session:
                 all_query += self.sort_query['default']
                 session[self.sort_field] = 'default'
+            else:
+                all_query += self.sort_query[session[self.sort_field]]
             temp_query=''
             if request.args.get('next'):
-                temp_query = self.page_next_query[session[self.sort_field]]%(request.args.get('next'))
-                all_query += temp_query + self.sort_query[session[self.sort_field]]
+                temp_query = ' OFFSET %s*10 '%(request.args.get('next'))
+                all_query += temp_query
+                next = int(request.args.get('next')) + 1
+                prev = int(request.args.get('next')) - 1 if int(request.args.get('next')) >= 2 else 1
             if request.args.get('prev'):
-                temp_query = self.page_next_query[session[self.sort_field]]%(request.args.get('prev'))
-                all_query += temp_query + self.sort_query[session[self.sort_field]]
-            if request.method == 'GET' and not request.args.get('next') and not request.args.get('prev') and not request.args.get('sort'):
-                all_query += self.sort_query[session[self.sort_field]]
+                temp_query = ' OFFSET %s*10 '%(request.args.get('prev'))
+                all_query += temp_query
+                next = int(request.args.get('prev')) + 1
+                prev = int(request.args.get('prev')) - 1 if int(request.args.get('prev')) >= 2 else 1
             data = {}
             for item in self.get_query_objects():
                 data[item[0]] = query_db(item[1])
+            print(all_query)
             data['list'] = query_db(all_query)
             if data['list']:
-                data['prev'] = data['list'][0][self.id_field] if request.args.get('next') else 0                
-                data['next'] = data['list'][-1][self.id_field]
+                data['prev'] = prev                
+                data['next'] = next
 
             self.result['data'] = data
         
