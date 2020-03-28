@@ -28,8 +28,14 @@ def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
         SECRET_KEY='dev',
-        DATABASE=os.path.join(app.instance_path, 'informsystem.sqlite'),
+        DBUSER=os.environ['DBUSER'],
+        DBHOST=os.environ['DBHOST'],
+        DBPORT=os.environ['DBPORT'],
+        DBNAME=os.environ['DBNAME'],
+        DBPASS=os.environ['DBPASS']
     )
+        #DATABASE=os.path.join(app.instance_path, 'informsystem.sqlite'),
+    #)
 
     if test_config is None:
         # load the instance config, if it exists, when not testing

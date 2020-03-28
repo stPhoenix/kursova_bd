@@ -12,6 +12,8 @@ flask = "*"
 python-dotenv = "*"
 flask-excel = "*"
 pyexcel-xls = "*"
+psycopg2 = "*"
+gunicorn = "*"
 
 [requires]
 python_version = "3.8"

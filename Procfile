@@ -1,0 +1,1 @@
+web: gunicorn "informsystem:create_app()" --log-file -
