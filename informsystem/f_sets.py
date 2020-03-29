@@ -6,10 +6,10 @@ from flask import (
 
 from informsystem.db import get_db, query_db
 
-import sqlite3
+import psycopg2
 
 list_query = 'SELECT * FROM F_Sets '
-detail_query = 'SELECT * FROM F_Sets WHERE F_Set_ID=? AND F_Entity_ID=?'
+detail_query = 'SELECT * FROM F_Sets WHERE F_Set_ID=%s AND F_Entity_ID=%s'
 
 
 from .base_views import ListView, DeleteView, DetailUpdateView, AddView
@@ -51,7 +51,7 @@ class F_SetsList(ListView):
 class F_SetsDelete(DeleteView):
     template_name = 'f_sets/list.html'
     c_module = 'f_sets'
-    delete_query = 'DELETE FROM F_Sets WHERE F_Set_ID=? AND F_Entity_ID=?'
+    delete_query = 'DELETE FROM F_Sets WHERE F_Set_ID=%s AND F_Entity_ID=%s'
     redirect_url='f_sets_list'
 
     def dispatch_request(self, s_id, e_id):
@@ -60,9 +60,9 @@ class F_SetsDelete(DeleteView):
             query_db(self.delete_query, (s_id, e_id))
             return redirect(url_for(self.redirect_url))
         
-        except sqlite3.Error as e:
+        except (Exception, psycopg2.Error) as e:
             self.result['error'] = True
-            self.result['message'] = e.args[0]
+            self.result['message'] = e
             return render_template(self.template_name, c_module=self.c_module, result=self.result)
 
 
@@ -70,8 +70,8 @@ class F_SetsDetailUpdate(DetailUpdateView):
     template_name='f_sets/detail.html'
     c_module='f_sets'
     detail_query=detail_query
-    update_query='UPDATE F_Sets SET   F_Set_ID=?, F_Entity_ID=?\
-                                WHERE  F_Set_ID=? AND F_Entity_ID=?'
+    update_query='UPDATE F_Sets SET   F_Set_ID=%s, F_Entity_ID=%s\
+                                WHERE  F_Set_ID=%s AND F_Entity_ID=%s'
     
     def dispatch_request(self, s_id, e_id):
         self.reset_result()
@@ -90,9 +90,9 @@ class F_SetsDetailUpdate(DetailUpdateView):
                 query_db(self.update_query, tuple(form_args))
                 self.result['success'] = True
                 self.result['message'] = 'Updated'
-        except sqlite3.Error as e:
+        except (Exception, psycopg2.Error) as e:
             self.result['error'] = True
-            self.result['message'] = e.args[0]
+            self.result['message'] = e
 
         return render_template(self.template_name, c_module=self.c_module, result=self.result)
 
@@ -110,7 +110,7 @@ class F_SetsDetailUpdate(DetailUpdateView):
 class F_SetsAdd(AddView):
     template_name='f_sets/add.html'
     c_module='f_sets'
-    insert_query='INSERT INTO F_Sets (F_Set_ID, F_Entity_ID) VALUES (?, ?)'
+    insert_query='INSERT INTO F_Sets (F_Set_ID, F_Entity_ID) VALUES (%s, %s)'
     
     def get_query_objects(self):
         qo = ()

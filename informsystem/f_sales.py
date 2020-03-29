@@ -6,10 +6,10 @@ from flask import (
 
 from informsystem.db import get_db, query_db
 
-import sqlite3
+import psycopg2
 
 list_query = 'SELECT * FROM F_Sales '
-detail_query = 'SELECT * FROM F_Sales WHERE F_Sales_ID=?'
+detail_query = 'SELECT * FROM F_Sales WHERE F_Sales_ID=%s'
 
 
 from .base_views import ListView, DeleteView, DetailUpdateView, AddView
@@ -51,7 +51,7 @@ class F_SalesList(ListView):
 class F_SalesDelete(DeleteView):
     template_name = 'f_sales/list.html'
     c_module = 'f_sales'
-    delete_query = 'DELETE FROM F_Sales WHERE F_Sales_ID=?'
+    delete_query = 'DELETE FROM F_Sales WHERE F_Sales_ID=%s'
     redirect_url='f_sales_list'
 
 
@@ -60,10 +60,10 @@ class F_SalesDetailUpdate(DetailUpdateView):
     template_name='f_sales/detail.html'
     c_module='f_sales'
     detail_query=detail_query
-    update_query='UPDATE F_Sales SET F_Sales_Quantity=?, \
-                                     F_Entity_ID=?, \
-                                     F_Entity_Date=? \
-                               WHERE F_Sales_ID=?'
+    update_query='UPDATE F_Sales SET F_Sales_Quantity=%s, \
+                                     F_Entity_ID=%s, \
+                                     F_Entity_Date=%s \
+                               WHERE F_Sales_ID=%s'
     
     def get_query_objects(self):
         qo = ()
@@ -81,7 +81,7 @@ class F_SalesAdd(AddView):
     template_name='f_sales/add.html'
     c_module='f_sales'
     detail_query=detail_query
-    insert_query='INSERT INTO F_Sales (F_Sales_Quantity, F_Entity_ID, F_Entity_Date) VALUES (?,?,?)'
+    insert_query='INSERT INTO F_Sales (F_Sales_Quantity, F_Entity_ID, F_Entity_Date) VALUES (%s,%s,%s)'
     
     def get_query_objects(self):
         qo = ()
@@ -98,17 +98,17 @@ class F_SalesAdd(AddView):
         if request.method == 'POST':
             try:
                 fid = request.form['f_entity_id']
-                quantity = int(query_db('SELECT f_entity_quantity FROM F_Entity WHERE F_Entity_ID=?',(fid,),True)[0])
+                quantity = int(query_db('SELECT f_entity_quantity FROM F_Entity WHERE F_Entity_ID=%s',(fid,),True)[0])
                 new_quantity = quantity - int(request.form['f_sales_quantity'])
                 if  new_quantity < 0:
                     self.result['error'] = True
                     self.result['message'] = 'Придбаних одиниць більше ніж в наявності!'
                     return render_template(self.template_name, c_module=self.c_module, result=self.result)
                 else:
-                    query_db('UPDATE F_Entity SET F_Entity_Quantity=? WHERE F_Entity_ID=?', (new_quantity, fid))
+                    query_db('UPDATE F_Entity SET F_Entity_Quantity=%s WHERE F_Entity_ID=%s', (new_quantity, fid))
                     return super().dispatch_request()
 
-            except sqlite3.Error as e:
+            except (Exception, psycopg2.Error) as e:
                 self.result['error'] = True
                 self.result['message'] = e.args[0]
                 return render_template(self.template_name, c_module=self.c_module, result=self.result)

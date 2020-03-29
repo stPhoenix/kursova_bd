@@ -6,8 +6,6 @@ from flask import (
 
 from informsystem.db import get_db, query_db
 
-import sqlite3
-
 list_query = 'SELECT E.F_Entity_ID,\
                      E.F_Entity_Price,\
                      E.F_Entity_Quantity,\
@@ -22,7 +20,7 @@ list_query = 'SELECT E.F_Entity_ID,\
               JOIN F_Type T USING (F_Type_ID)\
               JOIN F_Maker Mk USING (F_Maker_ID)\
               JOIN F_Material Mt USING (F_Material_ID)'
-detail_query = 'SELECT * FROM F_Entity E, F_Maker Mk, F_Type T, F_Material Mt WHERE E.F_Entity_ID=? \
+detail_query = 'SELECT * FROM F_Entity E, F_Maker Mk, F_Type T, F_Material Mt WHERE E.F_Entity_ID=%s \
                 AND Mk.F_Maker_ID=E.F_Maker_ID \
                 AND T.F_Type_ID=E.F_Type_ID \
                 AND Mt.F_Material_ID=E.F_Material_ID'
@@ -70,7 +68,7 @@ class EntityList(ListView):
 class EntityDelete(DeleteView):
     template_name = 'entity/list.html'
     c_module = 'entity'
-    delete_query = 'DELETE FROM F_Entity WHERE F_Entity_ID=?'
+    delete_query = 'DELETE FROM F_Entity WHERE F_Entity_ID=%s'
     redirect_url='entity_list'
 
 
@@ -79,16 +77,16 @@ class EntityDetailUpdate(DetailUpdateView):
     template_name='entity/detail.html'
     c_module='entity'
     detail_query=detail_query
-    update_query='UPDATE F_Entity SET   F_Entity_Price=?,\
-                                        F_Entity_Quantity=?,\
-                                        F_Entity_Height=?,\
-                                        F_Entity_Width=?,\
-                                        F_Entity_Length=?,\
-                                        F_Entity_Color=?,\
-                                        F_Type_ID=?,\
-                                        F_Maker_ID=?,\
-                                        F_Material_ID=?\
-                                  WHERE F_Entity_ID=?'
+    update_query='UPDATE F_Entity SET   F_Entity_Price=%s,\
+                                        F_Entity_Quantity=%s,\
+                                        F_Entity_Height=%s,\
+                                        F_Entity_Width=%s,\
+                                        F_Entity_Length=%s,\
+                                        F_Entity_Color=%s,\
+                                        F_Type_ID=%s,\
+                                        F_Maker_ID=%s,\
+                                        F_Material_ID=%s\
+                                  WHERE F_Entity_ID=%s'
     
     def get_query_objects(self):
         qo = (('f_type','SELECT * FROM F_Type'),
@@ -121,7 +119,7 @@ class EntityAdd(AddView):
                                         F_Entity_Color,\
                                         F_Type_ID,\
                                         F_Maker_ID,\
-                                        F_Material_ID) VALUES (?,?,?,?,?,?,?,?,?)'
+                                        F_Material_ID) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)'
     
     def get_query_objects(self):
         qo = (('f_type','SELECT * FROM F_Type'),

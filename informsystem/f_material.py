@@ -6,10 +6,9 @@ from flask import (
 
 from informsystem.db import get_db, query_db
 
-import sqlite3
 
 list_query = 'SELECT * FROM F_Material '
-detail_query = 'SELECT * FROM F_Material WHERE F_Material_ID=?'
+detail_query = 'SELECT * FROM F_Material WHERE F_Material_ID=%s'
 
 
 from .base_views import ListView, DeleteView, DetailUpdateView, AddView
@@ -51,7 +50,7 @@ class F_MaterialList(ListView):
 class F_MaterialDelete(DeleteView):
     template_name = 'f_material/list.html'
     c_module = 'f_material'
-    delete_query = 'DELETE FROM F_Material WHERE F_Material_ID=?'
+    delete_query = 'DELETE FROM F_Material WHERE F_Material_ID=%s'
     redirect_url='f_material_list'
 
 
@@ -60,8 +59,8 @@ class F_MaterialDetailUpdate(DetailUpdateView):
     template_name='f_material/detail.html'
     c_module='f_material'
     detail_query=detail_query
-    update_query='UPDATE F_Material SET   F_Material_Name=?\
-                                WHERE F_Material_ID=?'
+    update_query='UPDATE F_Material SET   F_Material_Name=%s\
+                                WHERE F_Material_ID=%s'
     
     def get_query_objects(self):
         qo = ()
@@ -76,7 +75,7 @@ class F_MaterialAdd(AddView):
     template_name='f_material/add.html'
     c_module='f_material'
     detail_query=detail_query
-    insert_query='INSERT INTO F_Material (F_Material_Name) VALUES (?)'
+    insert_query='INSERT INTO F_Material (F_Material_Name) VALUES (%s)'
     
     def get_query_objects(self):
         qo = ()

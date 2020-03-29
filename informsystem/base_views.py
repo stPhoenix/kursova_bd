@@ -8,7 +8,8 @@ from flask import (
 
 from informsystem.db import get_db, query_db
 
-import sqlite3
+#import sqlite3
+import psycopg2
 
 from werkzeug.datastructures import MultiDict
 
@@ -98,9 +99,9 @@ class ListView(BaseView):
             self.result['data'] = data
         
         
-        except sqlite3.Error as e:
+        except (Exception, psycopg2.Error) as e:
             self.result['error'] = True
-            self.result['message'] = e.args[0]
+            self.result['message'] = e
 
         return render_template(self.template_name, c_module=self.c_module, result=self.result)
 
@@ -117,9 +118,9 @@ class DeleteView(BaseView):
             query_db(self.delete_query, (id,))
             return redirect(url_for(self.redirect_url))
         
-        except sqlite3.Error as e:
+        except (Exception, psycopg2.Error) as e:
             self.result['error'] = True
-            self.result['message'] = e.args[0]
+            self.result['message'] = e
             return render_template(self.template_name, c_module=self.c_module, result=self.result)
 
 
@@ -146,9 +147,9 @@ class DetailUpdateView(BaseView):
                 data[item[0]] = query_db(item[1])
             self.result['data'] = data
                 
-        except sqlite3.Error as e:
+        except (Exception, psycopg2.Error) as e:
             self.result['error'] = True
-            self.result['message'] = e.args[0]
+            self.result['message'] = e
 
         return render_template(self.template_name, c_module=self.c_module, result=self.result)
 
@@ -174,9 +175,9 @@ class AddView(BaseView):
                 query_db(self.insert_query, tuple(form_args))
                 self.result['success'] = True
                 self.result['message'] = 'Success'
-        except sqlite3.Error as e:
+        except (Exception, psycopg2.Error) as e:
             self.result['error'] = True
-            self.result['message'] = e.args[0]
+            self.result['message'] = e
 
         return render_template(self.template_name, c_module=self.c_module, result=self.result)
 

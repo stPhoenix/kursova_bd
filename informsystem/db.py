@@ -1,4 +1,4 @@
-import sqlite3
+#import sqlite3
 import psycopg2
 import psycopg2.extras
 
@@ -96,8 +96,10 @@ def query_db(query, args=(), one=False):
     cur.execute(query, args)
     if 'INSERT' in query or 'DELETE' in query or 'CREATE' in query or 'UPDATE' in query or 'DROP' in query:
        cur.connection.commit()
+       return
     if 'insert' in query or 'delete' in query or 'create' in query or 'update' in query or 'drop' in query:
        cur.connection.commit()
+       return
 
     rv = cur.fetchall()    
     #cur.close()
